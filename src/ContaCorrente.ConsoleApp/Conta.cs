@@ -6,18 +6,46 @@
         public Cliente titular;
         public decimal saldo;
         public decimal limite;
-        public Movimentacao[] movimentacao;
+        public Movimentacao[] historico;
+        public int qtdeMovimentacao = 0;
+        public bool status;
+        int tamanhoHistorico = 10;
 
-        public void Saca(decimal quantidade)
+        public Conta()
         {
-            this.saldo -= quantidade;
         }
 
-        public void Deposita(decimal quantidade)
+        public Conta(int numero, Cliente titular, decimal limite, bool status)
+        {
+            this.numero = numero;
+            this.titular = titular;
+            this.limite = limite;
+            this.status = status;
+            historico = new Movimentacao[tamanhoHistorico];
+          
+        }
+        public void AdicionarMovimentacao(string tipo, decimal valor)
+        {
+            if(qtdeMovimentacao < historico.Length)
+            {
+                historico[qtdeMovimentacao] = new Movimentacao(tipo, valor);
+                qtdeMovimentacao++;
+            }
+        }
+        public void Sacar(decimal quantidade)
+        {
+            if (this.saldo < quantidade)            
+                Console.WriteLine("Saldo insuficiente na conta");
+            else
+            this.saldo -= quantidade;
+            
+            AdicionarMovimentacao("Debito", quantidade);
+        }
+        public void Depositar(decimal quantidade)
         {
             this.saldo += quantidade;
+            AdicionarMovimentacao("Credio", quantidade);
         }
-
         public bool VerificarSaque(decimal valor)
         {
             if(this.saldo < valor)
@@ -30,13 +58,12 @@
                 return true;
             }
         }
-
         public void Transferir(Conta destino, decimal valor)
-        {
+        {            
             this.saldo -= valor;
             destino.saldo += valor; 
+            AdicionarMovimentacao("Debito", valor);
         }
-
         public bool VerificarTransferencia(Conta destino, decimal valor)
         {
             bool retirou = this.VerificarSaque(valor);
@@ -46,9 +73,28 @@
             }
             else
             {
-                destino.Deposita(valor);
+                destino.Depositar(valor);
                 return true;
             }
         }
+        public void ExibirSaldo()
+        {
+            Console.WriteLine($"Nome:{titular.nome} {titular.sobrenome}\n");
+            Console.WriteLine($"Saldo atual R$: {saldo}");
+        }
+        public void ExibirExtrato()
+        {
+            Console.WriteLine("\nExtrato da Conta\n");            
+            for (int i = 0; i < qtdeMovimentacao; i++)
+            {                
+                Console.WriteLine($"Tipo:{historico[i].tipo}, R$:{historico[i].valor}");
+            }           
+            Console.WriteLine("\n");
+        }
+        public void SaldoAnterior()
+        {
+            
+        }
+        
     }
 }

@@ -4,29 +4,19 @@
     {
         static void Main(string[] args)
         {
-            Conta c1 = new Conta();
-            Cliente fabiano = new Cliente();
+            Conta c1 = new Conta(1, new Cliente("Fabiano","Lima","111.222.333-44"), 3000, false);
+            Conta c2 = new Conta(2, new Cliente("Alice", "Lima","222.333.444-55"), 2000, false);
 
-            c1.titular.nome = "Fabiano";
+            c1.Depositar(1000);
+            c1.Sacar(200);
+            c1.Depositar(500);            
+            c1.Transferir(c2, 300);
 
-            c1.saldo = 1000;
-
-            c1.Saca(200);
-
-            c1.Deposita(500);
-
-            bool conseguiu = c1.VerificarSaque(2000);
-
-            if(conseguiu)
-            {
-                Console.WriteLine("Conseguiu sacar");
-            }
-            else
-            {
-                Console.WriteLine("Não conseguiu sacar");
-            }
-
-            Console.WriteLine(conseguiu);
+            c1.ExibirSaldo();
+            c1.ExibirExtrato();
+            c2.ExibirSaldo();
+            
+            Console.ReadLine();
         }
     }
 }
