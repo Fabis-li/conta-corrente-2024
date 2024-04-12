@@ -4,7 +4,8 @@
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
+            Conta c1 = new Conta();
+            c1.nome = "Fabiano";
         }
     }
 }
