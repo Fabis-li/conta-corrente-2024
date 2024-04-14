@@ -12,8 +12,11 @@
             c1.Depositar(500);            
             c1.Transferir(c2, 300);
 
+            c1.ExbirCliente();
             c1.ExibirSaldo();
             c1.ExibirExtrato();
+
+            c2.ExbirCliente();
             c2.ExibirSaldo();
             
             Console.ReadLine();

@@ -5,6 +5,7 @@
         public int numero;
         public Cliente titular;
         public decimal saldo;
+        //public decimal saldoFinal;
         public decimal limite;
         public Movimentacao[] historico;
         public int qtdeMovimentacao = 0;
@@ -24,27 +25,27 @@
             historico = new Movimentacao[tamanhoHistorico];
           
         }
-        public void AdicionarMovimentacao(string tipo, decimal valor)
+        public void AdicionarMovimentacao(string tipo, decimal valor, decimal saldoConta)
         {
             if(qtdeMovimentacao < historico.Length)
             {
-                historico[qtdeMovimentacao] = new Movimentacao(tipo, valor);
+                historico[qtdeMovimentacao] = new Movimentacao(tipo, valor, saldoConta);
                 qtdeMovimentacao++;
             }
         }
         public void Sacar(decimal quantidade)
         {
-            if (this.saldo < quantidade)            
+            if (this.saldo < quantidade)
                 Console.WriteLine("Saldo insuficiente na conta");
             else
-            this.saldo -= quantidade;
+                this.saldo -= quantidade;
             
-            AdicionarMovimentacao("Debito", quantidade);
+            AdicionarMovimentacao("Debito", quantidade, saldo);
         }
         public void Depositar(decimal quantidade)
         {
             this.saldo += quantidade;
-            AdicionarMovimentacao("Credio", quantidade);
+            AdicionarMovimentacao("Credio", quantidade, saldo);
         }
         public bool VerificarSaque(decimal valor)
         {
@@ -62,7 +63,7 @@
         {            
             this.saldo -= valor;
             destino.saldo += valor; 
-            AdicionarMovimentacao("Debito", valor);
+            AdicionarMovimentacao("Debito", valor, saldo);
         }
         public bool VerificarTransferencia(Conta destino, decimal valor)
         {
@@ -78,8 +79,7 @@
             }
         }
         public void ExibirSaldo()
-        {
-            Console.WriteLine($"Nome:{titular.nome} {titular.sobrenome}\n");
+        {           
             Console.WriteLine($"Saldo atual R$: {saldo}");
         }
         public void ExibirExtrato()
@@ -87,14 +87,17 @@
             Console.WriteLine("\nExtrato da Conta\n");            
             for (int i = 0; i < qtdeMovimentacao; i++)
             {                
-                Console.WriteLine($"Tipo:{historico[i].tipo}, R$:{historico[i].valor}");
+                Console.WriteLine($"Tipo:{historico[i].tipo} - R$:{historico[i].valor}");
+                Console.WriteLine($"Saldo Conta R$:{historico[i].saldoConta}\n");                
             }           
             Console.WriteLine("\n");
         }
-        public void SaldoAnterior()
+       
+        public void ExbirCliente()
         {
-            
+            Console.WriteLine($"Numero Conta:{this.numero} - Cliente: {titular.nome} {titular.sobrenome}");
         }
+
         
     }
 }
